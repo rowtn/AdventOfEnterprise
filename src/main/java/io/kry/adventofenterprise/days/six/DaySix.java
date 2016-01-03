@@ -22,7 +22,6 @@ public class DaySix implements Day {
             LightSwitchboard switchboardBoolean = new LightSwitchboard(LightSwitchboard.Mode.BOOLEAN);
             LightSwitchboard switchboardBrightness = new LightSwitchboard(LightSwitchboard.Mode.BRIGHTNESS);
             Scanner scanner = new Scanner(is);
-
             while (scanner.hasNextLine()) {
                 String input = scanner.nextLine();
                 switchboardBoolean.processInstruction(input);

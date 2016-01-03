@@ -9,6 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static io.kry.adventofenterprise.framework.Utils.*;
+
 public class DayThirteen implements Day {
 
     public static final int ID = 13;
@@ -54,40 +56,12 @@ public class DayThirteen implements Day {
                 String personA = arrangment.get(j);
                 String personB = arrangment.get(j + 1);
                 delta = happinessUnits.get(personA).get(personB) + happinessUnits.get(personB).get(personA);
-
-                //System.out.println(personA + " is next to " + personB + " with a total happiness change of " + happinessUnits.get(personA).get(personB) + ", " + happinessUnits.get(personB).get(personA));
-
-                h+= delta;
+                h += delta;
             }
             h += happinessUnits.get(arrangment.get(0)).get(arrangment.get(arrangment.size() - 1)) + happinessUnits.get(arrangment.get(arrangment.size() - 1)).get(arrangment.get(0));
-            //System.out.println("total delta: " + h);
             return h;
         }).collect(Collectors.toSet());
         return allDeltaHappiness.stream().max(Integer::compare).get();
-    }
-
-    private List<List<String>> permutations(Collection<String> names) {
-        List<List<String>> permutations = new ArrayList<>();
-
-        permutations(new ArrayList<>(), new ArrayList<>(names), permutations);
-
-        return permutations;
-    }
-
-    private void permutations(List<String> head, List<String> tail, List<List<String>> permutations) {
-        if(tail.size() == 0) {
-            permutations.add(head);
-            return;
-        }
-        for(int i = 0;i < tail.size();i++) {
-            List<String> newTail = new ArrayList<>(tail);
-            List<String> newHead = new ArrayList<>(head.size() + 1);
-
-            newHead.addAll(head);
-            newHead.add(newTail.remove(i));
-
-            permutations(newHead, newTail, permutations);
-        }
     }
 }
 

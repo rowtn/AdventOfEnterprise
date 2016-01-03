@@ -8,12 +8,13 @@ import io.kry.adventofenterprise.exceptions.ParseInstructionException;
 import io.kry.adventofenterprise.exceptions.TaskException;
 import io.kry.adventofenterprise.days.six.factories.LightFactory;
 
+import java.util.Arrays;
+
 public class LightSwitchboard {
 
     private Light[] lights;
 
     public LightSwitchboard(Mode mode) {
-        //lights = Collections.nCopies(1000000, LightFactory.createLight(State.OFF)).toArray(new Light[1000000]);
         lights = new Light[1000000];
         for (int i = 0; i < 1000000; i++) {
             lights[i] = LightFactory.createLight(State.OFF, mode);
@@ -26,24 +27,15 @@ public class LightSwitchboard {
             LightRegionFactory.fromBounds(BoundsFactory.fromInstruction(instructionString), lights).applyInstruction(instruction);
         } catch (ParseInstructionException e) {
             e.printStackTrace();
-            throw new TaskException("Failed to parse instruction for day six");
+            throw new TaskException("Failed to parse instruction for day six: " + instructionString);
         }
     }
-
     public int getNumOfState(State state) {
-        int counter = 0;
-        for (Light light : lights) {
-            if (light.getState() == state) counter++;
-        }
-        return counter;
+        return Arrays.asList(lights).stream().map(Light::getState).filter(s -> s == state).toArray().length;
     }
 
     public int getTotalBrightness() {
-        int totalBrightness = 0;
-        for (Light light : lights) {
-            totalBrightness += light.getBrightness();
-        }
-        return totalBrightness;
+        return Arrays.asList(lights).stream().mapToInt(Light::getBrightness).sum();
     }
 
     public enum Mode {

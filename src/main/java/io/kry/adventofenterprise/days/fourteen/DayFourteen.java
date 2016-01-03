@@ -1,5 +1,6 @@
 package io.kry.adventofenterprise.days.fourteen;
 
+import io.kry.adventofenterprise.days.fourteen.object.Reindeer;
 import io.kry.adventofenterprise.framework.Day;
 import io.kry.adventofenterprise.framework.TaskAnswer;
 import io.kry.adventofenterprise.exceptions.TaskException;
@@ -12,9 +13,7 @@ import java.util.regex.Pattern;
 
 public class DayFourteen implements Day {
 
-    public static final int ID = 0;
-
-    /* Dancer can fly 7 km/s for 20 seconds, but then must rest for 119 seconds. */
+    public static final int ID = 14;
 
     @Override
     public TaskAnswer solve() throws TaskException {
@@ -23,50 +22,19 @@ public class DayFourteen implements Day {
             Pattern p = Pattern.compile("([A-z]+) can fly (\\d+) km/s for (\\d+) seconds, but then must rest for (\\d+) seconds\\.");
             while (scanner.hasNextLine()) {
                 Matcher m = p.matcher(scanner.nextLine());
+                m.matches();
                 reindeers.put(m.group(1), Reindeer.builder().speed(m.group(2)).movetime(m.group(3)).waitTime(m.group(4)).build());
             }
-            return new TaskAnswer(0, 0);
-        }
-    }
-
-    static class Reindeer {
-        private int speed, moveTime, waitTime, travelled, currentTick = 0;
-
-        public Reindeer(int speed, int moveTime, int waitTime) {
-            this.speed = speed;
-            this.moveTime = moveTime;
-            this.waitTime = waitTime;
-        }
-
-        static ReindeerBuilder builder() {
-            return new ReindeerBuilder();
-        }
-
-        public void tick() {
-            currentTick++;
-        }
-    }
-
-    static class ReindeerBuilder {
-        private int speed, moveTime, waitTime;
-
-        public ReindeerBuilder movetime(String moveTime) {
-            this.moveTime = Integer.parseInt(moveTime);
-            return this;
-        }
-
-        public ReindeerBuilder waitTime(String waitTime) {
-            this.waitTime = Integer.parseInt(waitTime);
-            return this;
-        }
-
-        public ReindeerBuilder speed(String speed) {
-            this.speed = Integer.parseInt(speed);
-            return this;
-        }
-
-        public Reindeer build() {
-            return new Reindeer(speed, moveTime, waitTime);
+            Map<String, Integer> points = new HashMap<>();
+            reindeers.keySet().forEach(s -> points.put(s, 0));
+            for (int i = 0; i < 2503; i++) {
+                reindeers.values().forEach(Reindeer::tick);
+                double max = reindeers.values().stream().mapToInt(Reindeer::getTravelled).max().getAsInt();
+                reindeers.forEach((k, v) -> {
+                    if (v.getTravelled() == max) points.put(k, points.get(k) + 1);
+                });
+            }
+            return new TaskAnswer(reindeers.values().stream().mapToInt(Reindeer::getTravelled).max().getAsInt(), points.values().stream().mapToInt(Integer::intValue).max().getAsInt());
         }
     }
 }

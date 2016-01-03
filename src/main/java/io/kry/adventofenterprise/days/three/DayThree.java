@@ -20,7 +20,6 @@ public class DayThree implements Day {
             String data = new Scanner(is).nextLine();
             List<Coordinate> visitedLocations = new ArrayList<>(Arrays.asList(new Coordinate[] {new Coordinate(0, 0)}));
             List<Coordinate> visitedLocations2 = new ArrayList<>(Arrays.asList(new Coordinate[] {new Coordinate(0, 0)}));
-            //Task One
             GPS[] gps = {new GPS(), new GPS(), new GPS()};
             int i = 0;
             for (char c : data.toCharArray()) {
