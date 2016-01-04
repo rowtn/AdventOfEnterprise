@@ -29,10 +29,4 @@ public class DaySeventeen implements Day {
             return new TaskAnswer(all.stream().filter(list -> list.stream().mapToInt(v -> v).sum() == totalEggnog).count(), all.stream().filter(l -> l.stream().mapToInt(i -> i).sum() == totalEggnog).filter(l -> l.size() == all.stream().filter(k -> k.stream().mapToInt(i -> i).sum() == totalEggnog).mapToInt(List::size).min().getAsInt()).count());
         }
     }
-
-    private void printlist(List<Integer> integers) {
-        System.out.println(StringUtils.join(integers, ", "));
-    }
-
-
 }
